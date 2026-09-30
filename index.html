@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}html{scroll-behavior:smooth}</style>
+<title>Όγκος Αρχιτέκτονες</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@200;300;500&family=Didact+Gothic&family=Noto+Sans+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: drafting-sheet grid — oversized thin serif statements, technical SVG drawings with dimension lines, project index as a schedule table, title-block footer */
+:root{
+  --paper:#F7F6F2; --sheet:#FFFFFF; --ink:#1A1A1A; --muted:#6E6D68; --hair:#D6D4CC; --faint:#ECEAE3; --red:#C8102E;
+  --f-display:"Noto Serif Display",Georgia,serif; --f-body:"Didact Gothic","Segoe UI",sans-serif; --f-mono:"Noto Sans Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#141414; --sheet:#1B1B1B; --ink:#EDEBE5; --muted:#A09E97; --hair:#34332F; --faint:#232321; --red:#FF4D5E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#141414; --sheet:#1B1B1B; --ink:#EDEBE5; --muted:#A09E97; --hair:#34332F; --faint:#232321; --red:#FF4D5E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.65}
+h1,h2,h3{font-family:var(--f-display);font-weight:300;margin:0;line-height:1.02;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.wrap{max-width:1280px;margin-inline:auto;padding-inline:20px}
+
+header{border-bottom:1px solid var(--ink)}
+header .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-size:22px;font-weight:500;letter-spacing:.02em}
+.mark i{width:18px;height:18px;border:2px solid var(--ink);position:relative}
+.mark i::after{content:"";position:absolute;right:-2px;bottom:-2px;width:8px;height:8px;background:var(--red)}
+header nav{margin-left:auto;display:flex;gap:28px}
+header nav a{text-decoration:none;font-size:15px}
+header nav a:hover{color:var(--red)}
+@media (max-width:640px){header nav{gap:16px}header nav a:nth-child(n+3){display:none}}
+
+.hero{padding-block:64px 40px}
+.hero h1{font-size:clamp(52px,10vw,148px);font-weight:200;letter-spacing:-.035em}
+.hero h1 span{color:var(--red)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;margin-top:48px;align-items:end}
+.hero-grid p{max-width:30em;font-size:18px}
+.hero-grid .mono{margin-bottom:10px;display:block}
+.drawing{border:1px solid var(--hair);background:var(--sheet);max-width:100%}
+.drawing svg{display:block;width:100%;height:auto}
+.drawing figcaption{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--hair);padding:8px 12px}
+figure{margin:0}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+
+.sec{padding-block:80px;border-top:1px solid var(--hair)}
+.sec-head{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(34px,5vw,64px)}
+@media (max-width:700px){.sec-head{grid-template-columns:1fr;gap:8px}}
+
+.featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.featured h3{font-size:28px;margin-top:14px}
+.featured p{color:var(--muted);font-size:15px;margin-top:6px}
+.featured .mono{margin-top:12px;display:block}
+@media (max-width:900px){.featured{grid-template-columns:1fr}}
+
+.filters{display:flex;flex-wrap:wrap;gap:4px 18px;margin-bottom:10px}
+.filters button{font:inherit;background:none;border:0;border-bottom:1px solid transparent;padding:4px 0;cursor:pointer;color:var(--muted)}
+.filters button[aria-pressed="true"]{color:var(--ink);border-color:var(--red)}
+.idx{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--ink)}
+td{padding:16px 12px 16px 0;border-bottom:1px solid var(--hair);vertical-align:baseline}
+td.nm{font-family:var(--f-display);font-size:22px;font-weight:300}
+td.n,th.n{text-align:right;font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums}
+td.yr{font-family:var(--f-mono);font-size:13px}
+tr:hover td.nm{color:var(--red)}
+.st{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.st.on::before{content:"● ";color:var(--red)}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink)}
+.steps div{padding:20px 20px 0 0;border-right:1px solid var(--hair)}
+.steps div:last-child{border-right:0}
+.steps div+div{padding-left:20px}
+.steps .mono{color:var(--red)}
+.steps h3{font-size:26px;margin:10px 0 8px}
+.steps p{color:var(--muted);font-size:15px}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}.steps div{padding:20px 16px 20px 0}.steps div:nth-child(2n){border-right:0}.steps div+div{padding-left:0}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}.steps div{border-right:0;border-bottom:1px solid var(--hair)}}
+
+.office{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px}
+.office .big{font-family:var(--f-display);font-weight:200;font-size:clamp(26px,3vw,38px);line-height:1.25}
+.people{display:grid;gap:0}
+.people div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--hair);padding-block:12px}
+.people span:last-child{color:var(--muted);font-size:14px;text-align:right}
+@media (max-width:860px){.office{grid-template-columns:1fr}}
+
+.contact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.contact .v{font-family:var(--f-display);font-size:24px;font-weight:300;margin-top:6px;overflow-wrap:anywhere}
+@media (max-width:760px){.contact{grid-template-columns:1fr}}
+
+.titleblock{border-top:2px solid var(--ink);margin-top:40px}
+.titleblock .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+.titleblock div{border-right:1px solid var(--hair);padding:12px 12px 20px 0}
+.titleblock div+div{padding-left:12px}
+.titleblock div:last-child{border-right:0}
+.titleblock b{display:block;font-weight:400;font-size:14px;margin-top:4px}
+@media (max-width:700px){.titleblock .wrap{grid-template-columns:1fr 1fr}.titleblock div:nth-child(2n){border-right:0}.titleblock div:nth-child(3){padding-left:0}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="mark" href="#top"><i aria-hidden="true"></i>ΟΓΚΟΣ</a>
+    <nav><a href="#work">Έργα</a><a href="#process">Διαδικασία</a><a href="#office">Γραφείο</a><a href="#contact">Επικοινωνία</a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <h1>Χώρος, φως,<br>ύλη<span>.</span></h1>
+    <div class="hero-grid">
+      <div>
+        <span class="mono">Αρχιτεκτονικό γραφείο · Θεσσαλονίκη · από το 2011</span>
+        <p>Σχεδιάζουμε κατοικίες, δημόσια κτίρια και επεμβάσεις σε διατηρητέα. Ξεκινάμε από τον τόπο: τον ήλιο, την τοπογραφία, τα υλικά που υπάρχουν γύρω.</p>
+      </div>
+      <figure class="drawing">
+        <svg viewBox="0 0 640 300" aria-label="Τομή κατοικίας με διαστάσεις">
+          <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--ink)" stroke-width="1"/></pattern></defs>
+          <g stroke="var(--faint)"><path d="M0 50h640M0 100h640M0 150h640M0 200h640M0 250h640M80 0v300M160 0v300M240 0v300M320 0v300M400 0v300M480 0v300M560 0v300"/></g>
+          <path d="M20 232 L200 232 L260 226 L620 220" stroke="var(--muted)" stroke-width="1" fill="none" stroke-dasharray="6 4"/>
+          <rect x="120" y="232" width="380" height="14" fill="url(#hatch)" stroke="var(--ink)"/>
+          <g fill="none" stroke="var(--ink)" stroke-width="2">
+            <path d="M130 232 V120 H330 V232"/>
+            <path d="M330 232 V70 H490 V232"/>
+            <path d="M110 120 H350"/><path d="M320 70 H510"/>
+            <path d="M330 160 H490"/>
+          </g>
+          <g stroke="var(--ink)" stroke-width="1.2" fill="none">
+            <path d="M180 232 V172 H260 V232"/>
+            <path d="M370 150 V100 H450 V150"/>
+            <path d="M370 212 V180 H450 V212"/>
+          </g>
+          <path d="M40 60 L110 110" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="3 4"/>
+          <circle cx="40" cy="58" r="10" fill="none" stroke="var(--red)" stroke-width="1.5"/>
+          <text x="58" y="44" font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--red)">ΗΛΙΟΣ 21/12 · 28°</text>
+          <g stroke="var(--muted)" stroke-width="1" font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--muted)">
+            <path d="M130 270 H490 M130 264 v12 M330 264 v12 M490 264 v12"/>
+            <text x="222" y="287" stroke="none">6.00</text><text x="398" y="287" stroke="none">4.80</text>
+            <path d="M540 70 V232 M534 70 h12 M534 160 h12 M534 232 h12"/>
+            <text x="552" y="118" stroke="none">+6.20</text><text x="552" y="200" stroke="none">+2.90</text>
+          </g>
+        </svg>
+        <figcaption><span class="mono">Τομή Α–Α · Κατοικία στο Πήλιο</span><span class="mono">1:100</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head"><span class="mono">01 · Επιλεγμένα έργα</span><h2>Τρία έργα που μας όρισαν</h2></div>
+      <div class="featured">
+        <figure>
+          <div class="drawing"><svg viewBox="0 0 400 280" aria-label="Κάτοψη κατοικίας">
+            <rect x="0" y="0" width="400" height="280" fill="var(--sheet)"/>
+            <g fill="none" stroke="var(--ink)" stroke-width="5"><path d="M40 40 H250 V120 H360 V240 H40 Z"/></g>
+            <g fill="none" stroke="var(--ink)" stroke-width="1.5"><path d="M150 40 V160 M40 160 H250 M250 120 V240"/><path d="M150 100 a30 30 0 0 1 30 30" stroke-dasharray="2 3"/></g>
+            <g stroke="var(--red)" stroke-width="3"><path d="M60 40 H130 M270 240 H340 M360 150 V210"/></g>
+            <g font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--muted)"><text x="70" y="105">ΣΑΛΟΝΙ 32m²</text><text x="170" y="105">ΚΟΥΖΙΝΑ</text><text x="70" y="205">ΥΠΝ. 14m²</text><text x="275" y="185">ΑΥΛΗ</text></g>
+            <path d="M370 30 l8 20 l-8 -6 l-8 6 z" fill="var(--ink)"/><text x="366" y="66" font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--ink)">Β</text>
+          </svg></div>
+          <span class="mono">2024 · Κατοικία · 186 m²</span>
+          <h3>Σπίτι στο Πήλιο</h3>
+          <p>Πέτρα από το οικόπεδο, ξύλινη στέγη και ένα αίθριο που προστατεύει από τον βοριά.</p>
+        </figure>
+        <figure>
+          <div class="drawing"><svg viewBox="0 0 400 280" aria-label="Όψη βιβλιοθήκης">
+            <rect x="0" y="0" width="400" height="280" fill="var(--sheet)"/>
+            <path d="M20 240 H380" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="50" y="90" width="300" height="150" fill="none" stroke="var(--ink)" stroke-width="2"/>
+            <g stroke="var(--ink)" stroke-width="1">
+              <path d="M80 90 V240 M110 90 V240 M140 90 V240 M170 90 V240 M200 90 V240 M230 90 V240 M260 90 V240 M290 90 V240 M320 90 V240"/>
+            </g>
+            <rect x="170" y="180" width="60" height="60" fill="var(--sheet)" stroke="var(--red)" stroke-width="2.5"/>
+            <path d="M40 90 L200 50 L360 90" fill="none" stroke="var(--ink)" stroke-width="2"/>
+            <g font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--muted)"><text x="50" y="262">ΟΨΗ ΝΟΤΙΑ</text><text x="290" y="262">+7.40</text></g>
+          </svg></div>
+          <span class="mono">2022 · Δημόσιο · 1.240 m²</span>
+          <h3>Δημοτική Βιβλιοθήκη Νάουσας</h3>
+          <p>Ξύλινες περσίδες που φιλτράρουν τον νότιο ήλιο πάνω από τα αναγνωστήρια.</p>
+        </figure>
+        <figure>
+          <div class="drawing"><svg viewBox="0 0 400 280" aria-label="Αξονομετρικό διατηρητέου">
+            <rect x="0" y="0" width="400" height="280" fill="var(--sheet)"/>
+            <g fill="none" stroke="var(--ink)" stroke-width="1.8">
+              <path d="M200 40 L320 100 L320 220 L200 260 L80 220 L80 100 Z"/>
+              <path d="M80 100 L200 150 L320 100 M200 150 V260"/>
+            </g>
+            <g stroke="var(--ink)" stroke-width="1"><path d="M110 135 v40 M140 148 v40 M170 160 v40 M230 160 v40 M260 148 v40 M290 135 v40"/></g>
+            <path d="M200 40 L320 100 L200 150 L80 100 Z" fill="var(--red)" opacity=".14"/>
+            <text x="20" y="266" font-family="Noto Sans Mono,monospace" font-size="10" fill="var(--muted)">ΝΕΑ ΣΤΕΓΗ · ΥΦΙΣΤΑΜΕΝΗ ΤΟΙΧΟΠΟΙΙΑ</text>
+          </svg></div>
+          <span class="mono">2020 · Αναστήλωση · 420 m²</span>
+          <h3>Αρχοντικό στην Άνω Πόλη</h3>
+          <p>Αποκατάσταση τοιχοποιίας του 1890 και νέα στέγη με τα πρότυπα της εποχής.</p>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><span class="mono">02 · Κατάλογος έργων</span><h2>Όλα τα έργα</h2></div>
+      <div class="filters" id="filters" role="group" aria-label="Φίλτρο τύπου έργου"></div>
+      <div class="idx"><table><thead><tr><th>Έτος</th><th>Έργο</th><th>Τοποθεσία</th><th>Τύπος</th><th class="n">Επιφάνεια</th><th>Κατάσταση</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="sec" id="process">
+    <div class="wrap">
+      <div class="sec-head"><span class="mono">03 · Διαδικασία</span><h2>Από το οικόπεδο στα κλειδιά</h2></div>
+      <div class="steps">
+        <div><span class="mono">Βήμα 1</span><h3>Προμελέτη</h3><p>Αποτύπωση οικοπέδου, πρόγραμμα αναγκών και δύο με τρεις εναλλακτικές λύσεις σε σκίτσα και μακέτες.</p></div>
+        <div><span class="mono">Βήμα 2</span><h3>Οριστική μελέτη</h3><p>Κατόψεις, τομές, όψεις, υλικά και προϋπολογισμός. Συντονισμός με στατικό και μηχανολόγο.</p></div>
+        <div><span class="mono">Βήμα 3</span><h3>Άδεια δόμησης</h3><p>Φάκελος για την ΥΔΟΜ και, όπου χρειάζεται, για το Συμβούλιο Αρχιτεκτονικής.</p></div>
+        <div><span class="mono">Βήμα 4</span><h3>Επίβλεψη</h3><p>Εβδομαδιαίες επισκέψεις στο εργοτάξιο μέχρι την παράδοση και τη λήψη ηλεκτρικού ρεύματος.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="office">
+    <div class="wrap office">
+      <div>
+        <span class="mono">04 · Γραφείο</span>
+        <p class="big" style="margin-top:18px">Είμαστε οκτώ άνθρωποι σε ένα ισόγειο της Βαλαωρίτου. Κάθε έργο το παρακολουθεί ένας συνεργάτης από το πρώτο σκίτσο μέχρι την παράδοση.</p>
+      </div>
+      <div class="people">
+        <div><span>Ελένη Μαργαρίτη</span><span>Αρχιτέκτων, ιδρύτρια</span></div>
+        <div><span>Νίκος Σταθόπουλος</span><span>Αρχιτέκτων, συνεταίρος</span></div>
+        <div><span>Άννα Κοντού</span><span>Αρχιτέκτων</span></div>
+        <div><span>Γιώργος Δήμου</span><span>Πολιτικός μηχανικός</span></div>
+        <div><span>Σοφία Αλεξίου</span><span>Εσωτερικοί χώροι</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="sec-head"><span class="mono">05 · Επικοινωνία</span><h2>Ας μιλήσουμε για το έργο σας</h2></div>
+      <div class="contact">
+        <div><span class="mono">Διεύθυνση</span><p class="v">Βαλαωρίτου 00, 546 25 Θεσσαλονίκη</p></div>
+        <div><span class="mono">Email</span><p class="v">studio@ogkos.example</p></div>
+        <div><span class="mono">Τηλέφωνο</span><p class="v">2310 000 000</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="titleblock">
+  <div class="wrap">
+    <div><span class="mono">Γραφείο</span><b>Όγκος Αρχιτέκτονες</b></div>
+    <div><span class="mono">Φύλλο</span><b>Α-01 · Αρχική</b></div>
+    <div><span class="mono">Κλίμακα</span><b>1:1</b></div>
+    <div><span class="mono">Σημείωση</span><b>Φανταστικό γραφείο · demo σχεδίασης © 2026</b></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const W=[
+    [2026,"Κατοικία στη Χαλκιδική","Νικήτη","Κατοικία",210,"Σε εξέλιξη"],
+    [2025,"Σχολείο Πανοράματος, επέκταση","Θεσσαλονίκη","Δημόσιο",860,"Σε εξέλιξη"],
+    [2025,"Διαμέρισμα Βαλαωρίτου","Θεσσαλονίκη","Εσωτερικοί χώροι",95,"Ολοκληρώθηκε"],
+    [2024,"Σπίτι στο Πήλιο","Άγιος Λαυρέντιος","Κατοικία",186,"Ολοκληρώθηκε"],
+    [2023,"Οινοποιείο Αμυνταίου","Φλώρινα","Επαγγελματικό",640,"Ολοκληρώθηκε"],
+    [2022,"Δημοτική Βιβλιοθήκη","Νάουσα","Δημόσιο",1240,"Ολοκληρώθηκε"],
+    [2021,"Καφέ στο λιμάνι","Καβάλα","Εσωτερικοί χώροι",120,"Ολοκληρώθηκε"],
+    [2020,"Αρχοντικό στην Άνω Πόλη","Θεσσαλονίκη","Αναστήλωση",420,"Ολοκληρώθηκε"],
+    [2018,"Πέτρινος ξενώνας","Ζαγόρι","Αναστήλωση",310,"Ολοκληρώθηκε"]
+  ];
+  const f=document.getElementById('filters'), rows=document.getElementById('rows');
+  const types=["Όλα",...new Set(W.map(w=>w[3]))];
+  function render(t){
+    [...f.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));
+    rows.innerHTML=W.filter(w=>t==="Όλα"||w[3]===t).map(w=>`<tr><td class="yr">${w[0]}</td><td class="nm">${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td class="n">${w[4].toLocaleString('el-GR')} m²</td><td><span class="st ${w[5]==='Σε εξέλιξη'?'on':''}">${w[5]}</span></td></tr>`).join('');
+  }
+  types.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.dataset.t=t;b.onclick=()=>render(t);f.appendChild(b)});
+  render("Όλα");
+})();
+</script>
+</body>
+</html>
